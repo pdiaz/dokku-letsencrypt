@@ -9,7 +9,7 @@ letsencrypt_update () {
   #shellcheck disable=SC2034
   declare desc="update the docker image used for ACME validation"
   dokku_log_info1 "Updating letsencrypt docker image..."
-  docker pull dokkupaas/letsencrypt-simp_le:latest
+  docker pull pd1az/letsencrypt-simp_le:latest
   dokku_log_verbose "done updating"
 }
 
@@ -87,7 +87,7 @@ letsencrypt_is_active() {
   # check if SSL is enabled on per-app level
   is_ssl_enabled "$app" || return 1
 
-  # check if certificate is identical to the current let's encrypt certificate by comparing SHA1 hashes 
+  # check if certificate is identical to the current let's encrypt certificate by comparing SHA1 hashes
   local cert_sha1=$( (cat "$DOKKU_ROOT/$app/tls/server.crt" 2>/dev/null) | sha1sum || echo "not_found");
   local le_sha1=$( (cat "$DOKKU_ROOT/$app/letsencrypt/certs/current/fullchain.pem" 2>/dev/null) | sha1sum || echo "not_found" );
   [[ "$cert_sha1" == "$le_sha1" ]] || return 2
@@ -179,5 +179,3 @@ letsencrypt_check_email() {
     return 1
   fi
 }
-
-
